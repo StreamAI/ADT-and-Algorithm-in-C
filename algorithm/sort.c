@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #define MAX_COUNT      1000000
-#define SHOW_COUNT     30
+#define SHOW_COUNT     50
 
 int *data = NULL;
 
@@ -203,6 +203,18 @@ void quicksort(int *data, int n)
         quick_sort(data, 0, n - 1);
 }
 
+int compfunc(const void *a, const void *b)
+{
+    const int arg1 = *(const int *)a;
+    const int arg2 = *(const int *)b;
+    
+    if(arg1 < arg2)
+        return -1;
+    if(arg1 > arg2)
+        return 1;      
+    return 0;
+}
+
 int main(void)
 {
     int k, n;
@@ -213,6 +225,7 @@ int main(void)
     printf("shell  sort: 2\n");
     printf("merge  sort: 3\n");
     printf("quick  sort: 4\n");
+    printf("qsort      : 5\n");
     printf("Select method: ");
     scanf("%d", &k);
 
@@ -235,6 +248,10 @@ int main(void)
 
     case 4:
         quicksort(data, MAX_COUNT);
+        break;
+
+    case 5:
+        qsort(data, MAX_COUNT, sizeof(int), compfunc);
         break;
     
     default:
