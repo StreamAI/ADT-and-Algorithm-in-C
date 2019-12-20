@@ -17,12 +17,13 @@ struct HeadNode {
 };
 typedef struct HeadNode *List;
 
+
 List Create(void)
 {
     List ptr = malloc(sizeof(struct HeadNode));
-    if(ptr == NULL)
+	if(ptr == NULL)
         printf("Out of space!");
-
+    
     ptr->size = 0;
     ptr->next = NULL;
 
@@ -50,7 +51,7 @@ void Insert(List L, pNode Position, ElementType x)
     {
         pTemp->next = Position->next;
         Position->next = pTemp;
-
+        
         L->size++;
     }
 }
@@ -67,10 +68,11 @@ void Delete(List L, ElementType x)
         pNode pTemp = Prev->next;
         Prev->next = pTemp->next;
         free(pTemp);
-
+        
         L->size--;
     }
 }
+
 
 void PrintList(List L)
 {
@@ -86,6 +88,70 @@ void PrintList(List L)
         ptr = ptr->next;
     }
     printf("\n");
+}
+
+void ReverseList(List L)
+{
+    if(L->next == NULL || L == NULL)
+        return;
+
+    pNode P = L->next;
+    pNode T = NULL;
+
+    while(P->next != NULL)
+    {
+        T = P->next;
+        P->next = T->next;
+        T->next = L->next;
+        L->next = T;
+        PrintList(L);
+    }
+}
+
+pNode ReverseList_Recursive(List L, pNode first)
+{
+    if(first->next == NULL || first == NULL)
+    {
+        L->next = first;
+        return first;
+    }
+
+    pNode T = ReverseList_Recursive(L, first->next);
+
+    T->next = first;
+    first->next = NULL;
+
+    PrintList(L);
+    return first;
+}
+
+void SortList(List L)
+{
+    if(L->next == NULL || L == NULL)
+        return;
+
+    pNode P = L->next;
+    pNode T = NULL;
+
+    while(P->next != NULL)
+    {
+        T = P->next;
+
+        if(T->Element >= P->Element)
+            P = T;
+        else
+        {
+            P->next = T->next;
+
+            pNode Cur = (pNode) L;
+            while(Cur->next != P->next && Cur->next->Element < T->Element)
+                Cur = Cur->next;
+            
+            T->next = Cur->next;
+            Cur->next = T;
+        }
+        PrintList(L);
+    }
 }
 
 int main(void)
@@ -105,10 +171,24 @@ int main(void)
         Insert(L, Position, 8);
     }
     PrintList(L);
+    printf("\n");
+    
+    ReverseList(L);
+    PrintList(L);
+    printf("\n");
+    
+    SortList(L);
+    PrintList(L);
+    printf("\n");
+    
+    ReverseList_Recursive(L, L->next);
+    PrintList(L);
+    printf("\n");
 
     Delete(L, 7);
     Delete(L, 4);
     PrintList(L);
-
+    printf("\n");
+    
     return 0;
 }
