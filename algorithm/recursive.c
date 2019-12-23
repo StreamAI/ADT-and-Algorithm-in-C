@@ -90,6 +90,25 @@ int fibonacci_Tailrecursive(int n, int res1, int res2)
         return fibonacci_Tailrecursive(n-1, res2, res2 + res1);
 }
 
+int fibonacci_goto(int n, int res1, int res2)
+{
+top:
+    if(n < 0)
+        return 0;
+    else if(n == 0)
+        return res1;
+    else if(n == 1)
+        return res2;
+    else
+    {
+    	n = n - 1;
+    	int temp = res1;
+    	res1 = res2;
+    	res2 = temp + res2;
+    	goto top;
+    }
+}
+
 int gcd(int a, int b)
 {
     if(b == 0)
@@ -110,6 +129,7 @@ int main(void)
     printf("fibonacci_recursive_memory function: 6\n");
     printf("fibonacci_Tailrecursive function: 7\n");
     printf("greatest common divisor function: 8\n");
+    printf("fibonacci_goto      function: 9\n");
     printf("select the number of function: ");
     scanf("%d", &k);
 
@@ -170,6 +190,13 @@ int main(void)
         res = gcd(n, m);
         printf("gcd(%d, %d) = %d\n", n, m, res);
         printf("lcm(%d, %d) = %d\n", n, m, n*m/res);
+        break;
+
+    case 9:
+        printf("input one interge: ");
+        scanf("%d", &n);
+        res = fibonacci_goto(n, 1, 1);
+        printf("fibonacci(%d) = %d\n", n, res);
         break;
     
     default:
