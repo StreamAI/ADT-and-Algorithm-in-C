@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <string.h>
 
-#define MAX_COUNT      1000000
+#define MAX_COUNT      50000
 #define SHOW_COUNT     50
 
 int *data = NULL;
@@ -69,7 +70,7 @@ void swap_data(int *a, int *b)
     }
 }
 
-void insert_sort(int *data, int n, int k, int step)
+void insert_sort_TailRecursive(int *data, int n, int k, int step)
 {
     if(k >= n)
         return;
@@ -82,7 +83,23 @@ void insert_sort(int *data, int n, int k, int step)
     }
     data[i + step] = temp; 
 
-    insert_sort(data, n, k + step, step);
+    insert_sort_TailRecursive(data, n, k + step, step);
+}
+
+void insert_sort(int *data, int n, int k, int step)
+{
+    while(k < n)
+    {
+        int i = k - step, temp = data[k];
+        while (i >= 0 && data[i] > temp)
+        {
+            data[i + step] = data[i];
+            i -= step;
+        }
+        data[i + step] = temp;
+
+        k += step; 
+    }
 }
 
 void shell_sort(int *data, int n, int step)
@@ -95,6 +112,43 @@ void shell_sort(int *data, int n, int step)
         insert_sort(data, n, i, step);
     
     shell_sort(data, n, step / 2);
+}
+
+void bubble_sort(int *data, int n)
+{
+    int i, j;
+    bool flag;
+
+    for(i = 0; i < n; i++)
+    {
+        flag = true;
+        for(j = 1; j < n - i; j++)
+        {
+            if(data[j] < data[j-1])
+            {
+                swap_data(&data[j], &data[j-1]);
+                flag = false;
+            }
+        }
+        if(flag == true)
+            break;
+    }
+}
+
+void select_sort(int *data, int n)
+{
+    int i,j, min;
+	for(i = 0; i < n; i++)
+    {
+        min = i;
+        for(j = i + 1; j < n; j++)
+        {
+            if(data[j] < data[min])
+                min = j;
+        }
+        if(min != i)
+            swap_data(&data[i], &data[min]);
+    }
 }
 
 void merge_data(int *data, int *temp, int left, int mid, int right)
@@ -203,6 +257,50 @@ void quicksort(int *data, int n)
         quick_sort(data, 0, n - 1);
 }
 
+void count_sort(int *data, int n)
+{
+    // Find the maximum and minimum values
+    int i, min = 0, max = 0;
+    for (i = 0; i < n; i++)
+    {
+        if(data[i] > max)
+            max = data[i];
+        if(data[i] < min)
+            min = data[i];
+    }
+    // Allocate space for count array
+    int *temp = malloc((max - min + 1) * sizeof(int));
+    if(temp == NULL)
+        return;
+    memset(temp, 0, ((max - min + 1) * sizeof(int)));
+    // Count the number of times each element appears
+    for(i = 0; i < n; i++)
+        temp[data[i] - min]++;
+    // Sum of count array accumulation
+    for (i = 1; i < (max - min + 1); i++)
+        temp[i] += temp[i - 1];
+    // Allocate space for sorted elements of storage
+    int *res = malloc(n * sizeof(int));
+    if(res == NULL)
+        return;
+    // Put the element in the right place
+    for(i = n - 1 ; i >= 0; i--)
+    {
+        int count = temp[data[i] - min];
+        if(count > 0)
+        {
+        	res[count - 1 + min] = data[i];
+        	temp[data[i] - min]--;
+        }
+    }
+    // Copy an ordered array to the original
+    for (i = 0; i < n; i++)
+        data[i] = res[i];
+    // Free temporarily allocated space
+    free(res);
+    free(temp);
+}
+
 int compfunc(const void *a, const void *b)
 {
     const int arg1 = *(const int *)a;
@@ -226,6 +324,9 @@ int main(void)
     printf("merge  sort: 3\n");
     printf("quick  sort: 4\n");
     printf("qsort      : 5\n");
+    printf("bubble sort: 6\n");
+    printf("select sort: 7\n");
+    printf("count  sort: 8\n");
     printf("Select method: ");
     scanf("%d", &k);
 
@@ -252,6 +353,18 @@ int main(void)
 
     case 5:
         qsort(data, MAX_COUNT, sizeof(int), compfunc);
+        break;
+
+    case 6:
+        bubble_sort(data, MAX_COUNT);
+        break;
+
+    case 7:
+        select_sort(data, MAX_COUNT);
+        break;
+
+    case 8:
+        count_sort(data, MAX_COUNT);
         break;
     
     default:

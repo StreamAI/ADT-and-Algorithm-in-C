@@ -13,3 +13,9 @@ Data Structures and Algorithm analysis in C/C++
 
 ## 6.《[数据结构与算法分析（六）--- 分治与减治 + 分治排序与二分查找](https://blog.csdn.net/m0_37621078/article/details/103468599)》
 
+## 7.《[数据结构与算法分析（七）--- 排序算法分析 + 排序优化](https://blog.csdn.net/m0_37621078/article/details/103675586)》
+
+## 8.《[数据结构与算法分析（八）--- 如何实现并用好一个散列表？](https://blog.csdn.net/m0_37621078/article/details/103724492)》
+
+## 9.《[数据结构与算法分析（九）--- 哈希算法能用来干啥？](https://blog.csdn.net/m0_37621078/article/details/103792281)》
+
