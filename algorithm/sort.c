@@ -257,6 +257,18 @@ void quicksort(int *data, int n)
         quick_sort(data, 0, n - 1);
 }
 
+int compfunc(const void *a, const void *b)
+{
+    const int arg1 = *(const int *)a;
+    const int arg2 = *(const int *)b;
+    
+    if(arg1 < arg2)
+        return -1;
+    if(arg1 > arg2)
+        return 1;      
+    return 0;
+}
+
 void count_sort(int *data, int n)
 {
     // Find the maximum and minimum values
@@ -301,16 +313,83 @@ void count_sort(int *data, int n)
     free(temp);
 }
 
-int compfunc(const void *a, const void *b)
+
+struct HeapStruct{
+    int capacity;
+    int size;
+    int *Array;
+};
+typedef struct HeapStruct *pHeap;
+
+void heap_insert(pHeap H, int x)
 {
-    const int arg1 = *(const int *)a;
-    const int arg2 = *(const int *)b;
+    if(H->size >= H->capacity)
+        return;
+
+    int i;
+    H->Array[H->size] = x;
+    H->size++;
+    // 自下往上堆化
+    for(i = H->size - 1; i - 1 >= 0 && H->Array[i] > H->Array[(i-1)/2]; i = (i-1)/2)
+        swap_data(&H->Array[i], &H->Array[(i-1)/2]);
+}
+
+pHeap build_heap(int *data, int n)
+{
+    pHeap H = malloc(sizeof(struct HeapStruct));
+    if(H == NULL)
+    {
+        printf("Out of space.");
+        return NULL;
+    }
+
+    int i;
+    H->Array = data;
+    H->capacity = n;
+    H->size = 0;
     
-    if(arg1 < arg2)
+    for(i = 0; i < n; i++)
+        heap_insert(H, data[i]);
+
+    return H;
+}
+
+int heap_removeTop(pHeap H)
+{
+    if(H->size <= 0)
         return -1;
-    if(arg1 > arg2)
-        return 1;      
-    return 0;
+
+    int i, maxPos;
+    int top = H->Array[0];
+    swap_data(&H->Array[0], &H->Array[H->size - 1]);
+    H->size--;
+    // 自上往下堆化
+    for(i = 0; (2 * i + 1) <= H->size - 1; i = maxPos)
+    {
+        maxPos = i;
+        if(H->Array[i] < H->Array[2 * i + 1])
+            maxPos = 2 * i + 1;
+        if((2 * i + 2) <= H->size - 1 && H->Array[maxPos] < H->Array[2 * i + 2])
+            maxPos = 2 * i + 2;
+        if(maxPos == i)
+            break;
+
+        swap_data(&H->Array[i], &H->Array[maxPos]);
+    }
+
+    return top;
+}
+
+void heap_sort(int *data, int n)
+{
+    pHeap H = build_heap(data, n);
+    if(H == NULL)
+        return;
+
+    while(H->size > 0)
+        heap_removeTop(H);
+
+    free(H);
 }
 
 int main(void)
@@ -327,6 +406,7 @@ int main(void)
     printf("bubble sort: 6\n");
     printf("select sort: 7\n");
     printf("count  sort: 8\n");
+    printf("heap   sort: 9\n");
     printf("Select method: ");
     scanf("%d", &k);
 
@@ -365,6 +445,10 @@ int main(void)
 
     case 8:
         count_sort(data, MAX_COUNT);
+        break;
+
+    case 9:
+        heap_sort(data, MAX_COUNT);
         break;
     
     default:

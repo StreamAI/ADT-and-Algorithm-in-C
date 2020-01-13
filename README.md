@@ -19,7 +19,9 @@ Data Structures and Algorithm analysis in C/C++
 
 ## 9.《[数据结构与算法分析（九）--- 哈希算法能用来干啥？](https://blog.csdn.net/m0_37621078/article/details/103792281)》
 
-## 10.《[数据结构与算法分析（十）--- 二叉树实现 + 递归树分析](https://blog.csdn.net/m0_37621078/article/details/103827814)》
+## 10.《[数据结构与算法分析（十）--- 二叉树本质与实现 + 递归树与决策树应用](https://blog.csdn.net/m0_37621078/article/details/103827814)》
 
 ## 11.《[数据结构与算法分析（十一）--- 平衡二叉树 + 红黑树](https://blog.csdn.net/m0_37621078/article/details/103899554)》
+
+## 12.《[数据结构与算法分析（十二）--- 怎么实现并用好一个堆或优先队列？](https://blog.csdn.net/m0_37621078/article/details/103937939)》
 
