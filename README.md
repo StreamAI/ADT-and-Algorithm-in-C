@@ -27,3 +27,7 @@ Data Structures and Algorithm analysis in C/C++
 
 ## 13.《[数据结构与算法分析（十三）--- 集合与映射 + Set/Map容器(C++11)](https://blog.csdn.net/m0_37621078/article/details/103965522)》
 
+## 14.《[数据结构与算法分析（十四）--- 字符串和字符处理函数库(C11)](https://blog.csdn.net/m0_37621078/article/details/110694587)》
+
+## 15.《[数据结构与算法分析（十五）--- String 和Regex 支持的字符处理操作(C++11)](https://blog.csdn.net/m0_37621078/article/details/111026237)》
+
