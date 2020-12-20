@@ -4,66 +4,29 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define MAX_COUNT      50000
+#define MAX_COUNT      1000000
 #define SHOW_COUNT     50
 
-int *data = NULL;
-
-int * data_init(int *data, int n)
+int * data_init(int n)
 {
-    int i;
-
-    data = malloc(n * sizeof(int));
-
+    if(n < 1)
+        return NULL;
+    // 为data 分配内存空间
+    int *data = malloc(n * sizeof(int));
+    if(data == NULL)
+        return NULL;
+    // 以当前时间作为随机数种子，使每次生成的随机数都不同
     srand(time(NULL));
-
-    for(i = 0; i < n; i++)
-        data[i] = rand() % n;
+    // 为data 生成原始无序数据
+    for(int i = 0; i < n; i++)
+        data[i] = rand();
 
     return data;
 }
 
-void show_data(int *data, int n, int m)
-{
-    int i;
-
-    printf("data show:\n");
-    for(i = 0; i < m; i++)
-    {
-        printf("%d  ", data[i]);
-    }
-
-    printf("\n......\n");   
-    for(i = n - m; i < n; i++)
-    {
-        printf("%d  ", data[i]);
-    }
-
-    printf("\n\n");
-}
-
-bool validate_data(int *data, int n)
-{
-    bool res = true;
-    int i;
-    for (i = 1; i < n; i++)
-    {
-        if(data[i] < data[i - 1])
-            res = false;
-    }
-
-    if(res == true)
-        printf("\nThe data sequence has been ordered.\n\n");
-    else
-        printf("\nThe data sequence is unordered.\n\n");
-
-    return res;
-}
-
 void swap_data(int *a, int *b)
 {
-    if(*a != *b)
-    {
+    if(*a != *b) {
         int temp = *a;
         *a = *b;
         *b = temp;
@@ -72,12 +35,11 @@ void swap_data(int *a, int *b)
 
 void insert_sort_TailRecursive(int *data, int n, int k, int step)
 {
-    if(k >= n)
+    if(data == NULL || k < 0 || k >= n || step < 1 || step >= n)
         return;
     
-    int i = k - step, temp = data[k];
-    while (i >= 0 && data[i] > temp)
-    {
+    int i = k -step, temp = data[k];
+    while (i >= 0 && data[i] > temp) {
         data[i + step] = data[i];
         i -= step;
     }
@@ -88,11 +50,12 @@ void insert_sort_TailRecursive(int *data, int n, int k, int step)
 
 void insert_sort(int *data, int n, int k, int step)
 {
-    while(k < n)
-    {
+    if(data == NULL || k < 0 || k >= n || step < 1 || step >= n)
+        return;
+
+    while(k < n) {
         int i = k - step, temp = data[k];
-        while (i >= 0 && data[i] > temp)
-        {
+        while (i >= 0 && data[i] > temp) {
             data[i + step] = data[i];
             i -= step;
         }
@@ -104,11 +67,10 @@ void insert_sort(int *data, int n, int k, int step)
 
 void shell_sort(int *data, int n, int step)
 {
-    if(step < 1)
+    if(data == NULL || step < 1 || step >= n)
         return;
 
-    int i;
-    for(i = 0; i < step; i++)
+    for(int i = 0; i < step; i++)
         insert_sort(data, n, i, step);
     
     shell_sort(data, n, step / 2);
@@ -116,16 +78,16 @@ void shell_sort(int *data, int n, int step)
 
 void bubble_sort(int *data, int n)
 {
+    if(data == NULL || n < 1)
+        return;
+    
     int i, j;
     bool flag;
 
-    for(i = 0; i < n; i++)
-    {
+    for(i = 0; i < n; i++) {
         flag = true;
-        for(j = 1; j < n - i; j++)
-        {
-            if(data[j] < data[j-1])
-            {
+        for(j = 1; j < n - i; j++) {
+            if(data[j] < data[j-1]) {
                 swap_data(&data[j], &data[j-1]);
                 flag = false;
             }
@@ -137,12 +99,13 @@ void bubble_sort(int *data, int n)
 
 void select_sort(int *data, int n)
 {
-    int i,j, min;
-	for(i = 0; i < n; i++)
-    {
+    if(data == NULL || n < 1)
+        return;
+
+    int i, j, min;
+	for(i = 0; i < n; i++) {
         min = i;
-        for(j = i + 1; j < n; j++)
-        {
+        for(j = i + 1; j < n; j++) {
             if(data[j] < data[min])
                 min = j;
         }
@@ -155,8 +118,7 @@ void merge_data(int *data, int *temp, int left, int mid, int right)
 {
     int i = left, j = mid + 1, k = 0;
 
-    while(i <= mid && j <= right)
-    {
+    while(i <= mid && j <= right) {
         if(data[i] <= data[j])
             temp[k++] = data[i++];
         else
@@ -187,11 +149,14 @@ void recursive_merge(int *data, int *temp, int left, int right)
 
 void merge_sort(int *data, int n)
 {
+    if(data == NULL || n < 1)
+        return;
+    
     int *temp = malloc(n * sizeof(int));
-
-    recursive_merge(data, temp, 0, n - 1);
-
-    free(temp);
+    if(temp != NULL) {
+        recursive_merge(data, temp, 0, n - 1);
+        free(temp);
+    }   
 }
 
 int partition(int *data, int left, int right)
@@ -214,8 +179,7 @@ int partition(int *data, int left, int right)
     swap_data(&data[mid], &data[right-1]);
     int i = left + 1, j = right - 2, pivot = right - 1;
     
-    while (true)
-    {
+    while (true) {
         while (data[i] < data[pivot])
             i++;
 
@@ -236,21 +200,23 @@ int partition(int *data, int left, int right)
 
 void quick_sort(int *data, int left, int right)
 {
-    if(right - left <= 1)
-    {
+    if(right - left <= 1) {
         if(right - left == 1 && data[left] > data[right])
             swap_data(&data[left], &data[right]);
-  
         return;
     }
 
     int divide = partition(data, left, right);
+
     quick_sort(data, left, divide - 1);
     quick_sort(data, divide + 1, right);
 }
 
 void quicksort(int *data, int n)
-{
+{   
+    if(data == NULL || n < 1)
+        return;
+
     if(n < 15)
         insert_sort(data, n, 1, 1);
     else
@@ -271,10 +237,11 @@ int compfunc(const void *a, const void *b)
 
 void count_sort(int *data, int n)
 {
+    if(data == NULL || n < 1)
+        return;
     // Find the maximum and minimum values
     int i, min = 0, max = 0;
-    for (i = 0; i < n; i++)
-    {
+    for (i = 0; i < n; i++) {
         if(data[i] > max)
             max = data[i];
         if(data[i] < min)
@@ -296,11 +263,9 @@ void count_sort(int *data, int n)
     if(res == NULL)
         return;
     // Put the element in the right place
-    for(i = n - 1 ; i >= 0; i--)
-    {
+    for(i = n - 1 ; i >= 0; i--) {
         int count = temp[data[i] - min];
-        if(count > 0)
-        {
+        if(count > 0) {
         	res[count - 1 + min] = data[i];
         	temp[data[i] - min]--;
         }
@@ -326,29 +291,26 @@ void heap_insert(pHeap H, int x)
     if(H->size >= H->capacity)
         return;
 
-    int i;
     H->Array[H->size] = x;
     H->size++;
     // 自下往上堆化
-    for(i = H->size - 1; i - 1 >= 0 && H->Array[i] > H->Array[(i-1)/2]; i = (i-1)/2)
+    for(int i = H->size - 1; i - 1 >= 0 && H->Array[i] > H->Array[(i-1)/2]; i = (i-1)/2)
         swap_data(&H->Array[i], &H->Array[(i-1)/2]);
 }
 
 pHeap build_heap(int *data, int n)
 {
     pHeap H = malloc(sizeof(struct HeapStruct));
-    if(H == NULL)
-    {
+    if(H == NULL) {
         printf("Out of space.");
         return NULL;
     }
 
-    int i;
     H->Array = data;
     H->capacity = n;
     H->size = 0;
     
-    for(i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
         heap_insert(H, data[i]);
 
     return H;
@@ -364,8 +326,7 @@ int heap_removeTop(pHeap H)
     swap_data(&H->Array[0], &H->Array[H->size - 1]);
     H->size--;
     // 自上往下堆化
-    for(i = 0; (2 * i + 1) <= H->size - 1; i = maxPos)
-    {
+    for(i = 0; (2 * i + 1) <= H->size - 1; i = maxPos) {
         maxPos = i;
         if(H->Array[i] < H->Array[2 * i + 1])
             maxPos = 2 * i + 1;
@@ -382,6 +343,9 @@ int heap_removeTop(pHeap H)
 
 void heap_sort(int *data, int n)
 {
+    if(data == NULL || n < 1)
+        return;
+    
     pHeap H = build_heap(data, n);
     if(H == NULL)
         return;
@@ -392,28 +356,63 @@ void heap_sort(int *data, int n)
     free(H);
 }
 
+bool validate_data(int *data, int n)
+{
+    bool res = true;
+    if(data == NULL || n < 1)
+        res = false;
+
+    for (int i = 1; i < n && res == true; i++) {
+        if(data[i] < data[i - 1])
+            res = false;
+    }
+
+    if(res == true)
+        printf("\nThe data sequence has been ordered.\n\n");
+    else
+        printf("\nThe data sequence is unordered.\n\n");
+
+    return res;
+}
+
+void show_data(int *data, int n, int m)
+{
+    if(data == NULL || m < 1 || n < m)
+        return;
+
+    printf("data show:\n");
+    for(int i = 0; i < m; i++)
+        printf("%d  ", data[i]);
+
+    printf("\n......\n");   
+    for(int i = n - m; i < n; i++)
+        printf("%d  ", data[i]);
+
+    printf("\n\n");
+}
+
 int main(void)
 {
-    int k, n;
-    clock_t start, end;
-    double time;
-
-    printf("insert sort: 1\n");
-    printf("shell  sort: 2\n");
-    printf("merge  sort: 3\n");
-    printf("quick  sort: 4\n");
-    printf("qsort      : 5\n");
-    printf("bubble sort: 6\n");
-    printf("select sort: 7\n");
-    printf("count  sort: 8\n");
-    printf("heap   sort: 9\n");
+    int method;
+    
+    printf("Insert sort: 1\n");
+    printf("Shell  sort: 2\n");   
+    printf("Merge  sort: 3\n");
+    printf("Quick  sort: 4\n");
+    printf("qsort      : 5\n"); 
+    printf("Bubble sort: 6\n");
+    printf("Select sort: 7\n");
+    printf("Count  sort: 8\n");
+    printf("Heap   sort: 9\n");
     printf("Select method: ");
-    scanf("%d", &k);
+    scanf("%d", &method);
 
-    data = data_init(data, MAX_COUNT);
+    int *data = data_init(MAX_COUNT);
+    if(data == NULL)
+        return -1;
 
-    start = clock();
-    switch (k)
+    clock_t start = clock();
+    switch (method)
     {
     case 1:
         insert_sort(data, MAX_COUNT, 1, 1);
@@ -442,11 +441,11 @@ int main(void)
     case 7:
         select_sort(data, MAX_COUNT);
         break;
-
+    
     case 8:
         count_sort(data, MAX_COUNT);
         break;
-
+    
     case 9:
         heap_sort(data, MAX_COUNT);
         break;
@@ -454,8 +453,8 @@ int main(void)
     default:
         break;
     }
-    end = clock();
-    time = (double)(end - start) / (CLOCKS_PER_SEC / 1000);
+    clock_t end = clock();
+    double time = (double)(end - start) / (CLOCKS_PER_SEC / 1000);
 
     //show_data(data, MAX_COUNT, SHOW_COUNT);
     validate_data(data, MAX_COUNT);
