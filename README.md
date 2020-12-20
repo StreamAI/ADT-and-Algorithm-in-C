@@ -31,3 +31,5 @@ Data Structures and Algorithm analysis in C/C++
 
 ## 15.《[数据结构与算法分析（十五）--- String 和Regex 支持的字符处理操作(C++11)](https://blog.csdn.net/m0_37621078/article/details/111026237)》
 
+## 16.《[数据结构与算法分析（十六）--- 字符串匹配算法 + 效率优化(BF + RK + KMP + BMH)](https://blog.csdn.net/m0_37621078/article/details/111036176)》
+
