@@ -33,5 +33,7 @@ Data Structures and Algorithm analysis in C/C++
 
 ## 16.《[数据结构与算法分析（十六）--- 字符串匹配算法 + 效率优化(BF + RK + KMP + BMH)](https://blog.csdn.net/m0_37621078/article/details/111036176)》
 
-## 17.《[数据结构与算法分析（十七）--- 怎么用回溯剪枝高效穷举所有可能的解？](https://blog.csdn.net/m0_37621078/article/details/111440682)》
+## 17.《[数据结构与算法分析（十七）--- 怎么用回溯剪枝高效穷举所有可行解？](https://blog.csdn.net/m0_37621078/article/details/111440682)》
+
+## 18.《[数据结构与算法分析（十八）--- 如何使用动态规划高效寻找最优解？](https://blog.csdn.net/m0_37621078/article/details/110410272)》
 
